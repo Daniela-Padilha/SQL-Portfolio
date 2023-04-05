@@ -1,0 +1,203 @@
+/* Exercise from Khan Academy to train Join */
+
+/* Create table about famous people and what they do */
+Create Table authors (
+  id INTEGER PRIMARY KEY, name TEXT, gender Text
+);
+Insert into authors (name, gender) 
+Values 
+  ("Stephanie Meyer", "Female");
+Insert into authors (name, gender) 
+Values 
+  ("J. K. Rowling", "Female");
+Insert into authors (name, gender) 
+Values 
+  ("James Daschner", "Male");
+Insert into authors (name, gender) 
+Values 
+  ("Stephanie Garber", "Female");
+Insert into authors (name, gender) 
+Values 
+  ("Namina Forna", "Female");
+Insert into authors (name, gender) 
+Values 
+  ("T. J. Klune", "Male");
+Create Table books (
+  id INTEGER PRIMARY KEY, title TEXT, author_id integer
+);
+Insert into books (title, author_id) 
+Values 
+  ("Twilight", 1);
+Insert into books (title, author_id) 
+Values 
+  ("New Moon", 1);
+Insert into books (title, author_id) 
+Values 
+  ("Eclipse", 1);
+Insert into books (title, author_id) 
+Values 
+  ("Breakind Dawn", 1);
+Insert into books (title, author_id) 
+Values 
+  ("Harry Potter 1", 2);
+Insert into books (title, author_id) 
+Values 
+  ("Harry Potter 2", 2);
+Insert into books (title, author_id) 
+Values 
+  ("Harry Potter 3", 2);
+Insert into books (title, author_id) 
+Values 
+  ("Harry Potter 4", 2);
+Insert into books (title, author_id) 
+Values 
+  ("Harry Potter 5", 2);
+Insert into books (title, author_id) 
+Values 
+  ("Harry Potter 6", 2);
+Insert into books (title, author_id) 
+Values 
+  ("Harry Potter 7", 2);
+Insert into books (title, author_id) 
+Values 
+  ("Maze Runner 1", 3);
+Insert into books (title, author_id) 
+Values 
+  ("Maze Runner 2", 3);
+Insert into books (title, author_id) 
+Values 
+  ("Maze Runner 3", 3);
+Insert into books (title, author_id) 
+Values 
+  ("Caraval", 4);
+Insert into books (title, author_id) 
+Values 
+  ("Legendary", 4);
+Insert into books (title, author_id) 
+Values 
+  ("Finale", 4);
+Insert into books (title, author_id) 
+Values 
+  ("The Gilded Ones", 5);
+Insert into books (title, author_id) 
+Values 
+  ("The Merciless Ones", 5);
+Insert into books (title, author_id) 
+Values 
+  (
+    "The House in the Cerulean Sea", 
+    6
+  );
+Insert into books (title, author_id) 
+Values 
+  ("Under the Whispering Door", 6);
+Create table prices (
+  id INTEGER PRIMARY KEY, book_id INTEGER, 
+  price REAL
+);
+INSERT into prices(book_id, price) 
+Values 
+  (1, 16.60);
+INSERT into prices(book_id, price) 
+Values 
+  (2, 16.60);
+INSERT into prices(book_id, price) 
+Values 
+  (3, 16.60);
+INSERT into prices (book_id, price) 
+Values 
+  (4, 19.80);
+INSERT into prices (book_id, price) 
+Values 
+  (5, 16.50);
+INSERT into prices (book_id, price) 
+Values 
+  (6, 16.50);
+INSERT into prices (book_id, price) 
+Values 
+  (7, 16.50);
+INSERT into prices (book_id, price) 
+Values 
+  (8, 16.50);
+INSERT into prices (book_id, price) 
+Values 
+  (9, 16.50);
+INSERT into prices (book_id, price) 
+Values 
+  (10, 16.50);
+INSERT into prices (book_id, price) 
+Values 
+  (11, 16.50);
+INSERT into prices (book_id, price) 
+Values 
+  (12, 14.30);
+INSERT into prices (book_id, price) 
+Values 
+  (13, 14.30);
+INSERT into prices (book_id, price) 
+Values 
+  (14, 14.30);
+INSERT into prices (book_id, price) 
+Values 
+  (15, 18.70);
+INSERT into prices (book_id, price) 
+Values 
+  (16, 17.90);
+INSERT into prices (book_id, price) 
+Values 
+  (17, 19.00);
+INSERT into prices (book_id, price) 
+Values 
+  (18, 16.50);
+INSERT into prices (book_id, price) 
+Values 
+  (19, 17.00);
+INSERT into prices (book_id, price) 
+Values 
+  (20, 14.50);
+INSERT into prices (book_id, price) 
+Values 
+  (21, 15.99);
+Select 
+  * 
+from 
+  authors;
+Select 
+  * 
+from 
+  books;
+Select 
+  * 
+from 
+  prices;
+  
+/* show the book titles and the author names side by side*/
+Select 
+  books.title, 
+  authors.name 
+from 
+  authors 
+  Join books on authors.id = books.author_id;
+  
+/* count how many books were written by women*/
+Select 
+  Count(*), 
+  authors.gender 
+from 
+  authors 
+  Join books on authors.id = books.author_id 
+where 
+  gender = "Female";
+  
+/*how much does it cost to buy all the books per autor?*/
+Select 
+  name, 
+  sum(price) as total_price 
+from 
+  authors 
+  Join books on authors.id = books.author_id 
+  Join prices on books.id = prices.book_id 
+Group by 
+  name 
+Order by 
+  total_price desc;
