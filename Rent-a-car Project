@@ -1,0 +1,67 @@
+/* Project about analysing the rentals of a rent-a-car , using a databse created by me.
+The database consists of 3 tables that are structured like so:
+
+CREATE TABLE Cars (
+    Id            INTEGER   PRIMARY KEY AUTOINCREMENT,
+    Manufacturer  TEXT (30),
+    Model         TEXT (30),
+    Category      TEXT (30),
+    Gear_box_type TEXT (20),
+    Fuel_type     TEXT
+);
+
+CREATE TABLE Costumers (
+    Id        INTEGER    PRIMARY KEY AUTOINCREMENT,
+    FirstName TEXT (20),
+    LastName  TEXT (20),
+    Gender    TEXT,
+    Age       INTEGER,
+    Email     TEXT (100) 
+);
+
+CREATE TABLE Rentals (
+    Id          INTEGER      PRIMARY KEY AUTOINCREMENT,
+    Costumer_id INTEGER,
+    Car_id      INTEGER,
+    Start_date  NUMERIC (10),
+    End_date    NUMERIC (10),
+    Price       REAL
+);
+
+/*Which was the most expensive rental?*/
+
+SELECT Id,
+       firstname,
+       lastname,
+       manufacturer,
+       model,
+       start_date,
+       end_date,
+       max(price) 
+  FROM rentals
+       JOIN
+       cars ON rentals.Car_id = cars.Id 
+       JOIN
+       costumers ON rentals.Costumer_id = costumers.Id
+       
+/*Which was the cheapest rental?*/
+
+SELECT Id,
+       firstname,
+       lastname,
+       manufacturer,
+       model,
+       start_date,
+       end_date,
+       min(price) 
+  FROM rentals
+       JOIN
+       cars ON rentals.Car_id = cars.Id 
+       JOIN
+       costumers ON rentals.Costumer_id = costumers.Id
+
+
+/*Which was the most requested car*/
+
+
+
