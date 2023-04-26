@@ -1,0 +1,69 @@
+/*Designing a database from scratch*/
+
+CREATE TABLE candy_store (
+  id INTEGER PRIMARY KEY, name TEXT, quantity INTEGER, 
+  price INTEGER, sells TEXT
+);
+INSERT INTO candy_store 
+VALUES 
+  (1, "rebuçados", 100, 1, "yes");
+INSERT INTO candy_store 
+VALUES 
+  (2, "gomas", 500, 2, "yes");
+INSERT INTO candy_store 
+VALUES 
+  (3, "pastilhas", 200, 3, "yes");
+INSERT INTO candy_store 
+VALUES 
+  (4, "bolo", 50, 100, "no");
+INSERT INTO candy_store 
+VALUES 
+  (5, "chupas", 300, 5, "yes");
+INSERT INTO candy_store 
+VALUES 
+  (
+    6, "chocolate de leite", 400, 10, "yes"
+  );
+INSERT INTO candy_store 
+VALUES 
+  (
+    7, "chocolate negro", 200, 15, "no"
+  );
+INSERT INTO candy_store 
+VALUES 
+  (
+    8, "chocolate branco", 300, 12, "no"
+  );
+INSERT INTO candy_store 
+VALUES 
+  (9, "gomas sour", 500, 3, "yes");
+INSERT INTO candy_store 
+VALUES 
+  (10, "tic tacs", 1000, 1, "yes");
+INSERT INTO candy_store 
+VALUES 
+  (11, "amendoas", 3000, 6, "yes");
+INSERT INTO candy_store 
+VALUES 
+  (
+    12, "ferrero roche", 200, 30, "yes"
+  );
+INSERT INTO candy_store 
+VALUES 
+  (13, "reeses", 100, 15, "no");
+INSERT INTO candy_store 
+VALUES 
+  (14, "bounty", 200, 16, "no");
+INSERT INTO candy_store 
+VALUES 
+  (15, "milka", 300, 500, "no");
+SELECT 
+  * 
+FROM 
+  candy_store 
+ORDER BY 
+  price;
+SELECT 
+  SUM(quantity) 
+FROM 
+  candy_store;
