@@ -1,4 +1,4 @@
-/* Project about analysing the rentals of a rent-a-car , using a databse created by me.
+/* Project about analysing the rentals of a rent-a-car , using a database created by me.
 The database consists of 3 tables that are structured like so:
 
 CREATE TABLE Cars (
