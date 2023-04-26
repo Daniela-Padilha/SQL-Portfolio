@@ -1,0 +1,65 @@
+
+/* Dataset Source:
+  https://www.kaggle.com/nasa/astronaut-yearbook*/
+
+/*Doing some easy calculations*/
+
+Select 
+  * 
+from 
+  astronauts;
+Select 
+  max(space_flight_hr) 
+from 
+  astronauts;
+Select 
+  min(space_flight_hr) 
+from 
+  astronauts;
+Select 
+  avg(space_flight_hr) 
+from 
+  astronauts;
+  
+/*Finding witch astronauts have more than 2000 hrs of flyght*/
+
+Select 
+  name, 
+  sum(space_flight_hr) As total_flight_hr 
+from 
+  astronauts 
+Group by 
+  name 
+Having 
+  total_flight_hr > 2000;
+/*create a new column to organize the hours flying in classes*/
+Select 
+  Count(*), 
+  Case When space_flight_hr < 100 THEN "a little" When space_flight_hr < 1000 THEN "average" When space_flight_hr < 2000 THEN "a lot" Else "imense" End as "time_flying" 
+From 
+  astronauts 
+Group by 
+  time_flying 
+Order by 
+  count(*);
+  
+/*identifying how many women have the most flying hours*/
+
+Select 
+  distinct gender 
+from 
+  astronauts;
+Select 
+  count(*) 
+from 
+  astronauts 
+where 
+  space_flight_hr > 2000 
+  and gender = "Female";
+Select 
+  count(*) 
+from 
+  astronauts 
+where 
+  space_flight_hr > 2000 
+  and gender = "Male";
