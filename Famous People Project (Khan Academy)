@@ -1,6 +1,5 @@
-/* Exercise from Khan Academy to train Join */
+/*Famous People Project: Create table about famous people and what they do */
 
-/* Create table about famous people and what they do */
 Create Table authors (
   id INTEGER PRIMARY KEY, name TEXT, gender Text
 );
