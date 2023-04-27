@@ -74,6 +74,23 @@ SELECT Id,
  ORDER BY count(model) DESC
  LIMIT 1;
  
+ /*Which is the company most frequent costumer?*/
  
+SELECT DISTINCT costumers.Id,
+                count(firstname),
+                lastname
+  FROM costumers
+       JOIN
+       rentals ON costumers.Id = rentals.Costumer_id
+ GROUP BY firstname
+ ORDER BY count(firstname) DESC;
+;
 
+/*What would be the forecast of the company for next year, if the inflaction was 0,05%?*/
+
+SELECT sum(price),
+       sum(price) + (sum(price) * 0.005) AS forecast
+  FROM rentals;
+  
+  
 
