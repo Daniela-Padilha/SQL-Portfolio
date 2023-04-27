@@ -63,5 +63,17 @@ SELECT Id,
 
 /*Which was the most requested car*/
 
+SELECT Id,
+       manufacturer,
+       model,
+       count(model) 
+  FROM rentals
+       JOIN
+       cars ON rentals.Car_id = cars.Id
+ GROUP BY model
+ ORDER BY count(model) DESC
+ LIMIT 1;
+ 
+ 
 
 
