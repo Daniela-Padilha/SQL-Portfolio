@@ -92,5 +92,14 @@ SELECT sum(price),
        sum(price) + (sum(price) * 0.005) AS forecast
   FROM rentals;
   
-  
+/*Classifying car models by price/* 
 
+SELECT Id,
+       manufacturer,
+       model,
+       sum(price),
+       CASE WHEN sum(price) > 2000 THEN 'Expensive' WHEN sum(price) BETWEEN 1000 AND 2000 THEN 'Average' ELSE 'Cheap' END AS Price_range
+  FROM rentals
+       JOIN
+       cars ON rentals.Car_id = cars.Id
+ GROUP BY model;
