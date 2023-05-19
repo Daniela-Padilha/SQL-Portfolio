@@ -1,0 +1,185 @@
+/*Database description
+Table City, with the following columns:
+ID number
+Name varchar(17)
+CountryCode varchar(3)
+District varchar (20)
+Population number */
+
+/*Task 1. Query all columns for all American cities in the CITY table with populations larger than 100000. The CountryCode for America is USA.*/
+
+Select 
+  * 
+from 
+  city 
+Where 
+  countrycode = 'USA' 
+  AND population > 100000;
+
+/*Task 2. Query the NAME field for all American cities in the CITY table with populations larger than 120000.*/
+
+Select 
+  name 
+from 
+  city 
+Where 
+  countrycode = 'USA' 
+  AND population > 120000;
+
+/*Task 3. Query all attributes of every Japanese city in the CITY table. The COUNTRYCODE for Japan is JPN.*/
+
+Select 
+  * 
+from 
+  city 
+Where 
+  countrycode = 'JPN';
+
+/*Database description
+Table Station, with the following columns:
+ID number
+City varchar2(21)
+State varchar2(2)
+Lat_N number
+Long_W number 
+
+where LAT_N is the northern latitude and LONG_W is the western longitude.*/
+
+/*Task 4. Query a list of CITY names from STATION for cities that have an even ID number. Print the results in any order, but exclude duplicates from the answer.*/
+
+SELECT 
+  DISTINCT city 
+FROM 
+  station 
+WHERE 
+  ID % 2 = 0;
+
+/*Task 5. Query the two cities in STATION with the shortest and longest CITY names, as well as their respective lengths (i.e.: number of characters in the name). If there is more than one smallest or largest city, choose the one that comes first when ordered alphabetically.*/
+
+SELECT 
+  city, 
+  length(city) 
+FROM 
+  station ORSER BY length(city) ASC, 
+  city 
+LIMIT 
+  1;
+SELECT 
+  City, 
+  length(city) 
+FROM 
+  station 
+ORDER BY 
+  length(city) DESC, 
+  city 
+LIMIT 
+  1;
+
+/*Task 6. Query the list of CITY names starting with vowels (i.e., a, e, i, o, or u) from STATION. Your result cannot contain duplicates.*/
+
+SELECT 
+  DISTINCT city 
+FROM 
+  station 
+WHERE 
+  city LIKE 'a%' 
+  OR city LIKE 'e%' 
+  OR city LIKE 'i%' 
+  OR city LIKE 'o%' 
+  OR city LIKE 'u%';
+
+/*Task 7. Query the list of CITY names ending with vowels (a, e, i, o, u) from STATION. Your result cannot contain duplicates.*/
+
+SELECT 
+  DISTINCT city 
+FROM 
+  station 
+WHERE 
+  city LIKE '%a' 
+  OR city LIKE '%e' 
+  OR city LIKE '%i' 
+  OR city LIKE '%o' 
+  OR city LIKE '%u';
+
+/* Task 8. Query the list of CITY names from STATION which have vowels (i.e., a, e, i, o, and u) as both their first and last characters. Your result cannot contain duplicates.*/
+
+SELECT 
+  DISTINCT city 
+FROM 
+  station 
+WHERE 
+  Upper (
+    substr(City, 1, 1)
+  ) in ('a', 'e', 'i', 'o', 'u') 
+  and lower(
+    substr(
+      City, 
+      Length(City), 
+      1
+    )
+  ) in ('a', 'e', 'i', 'o', 'u');
+
+/* Task 9. Query the list of CITY names from STATION that do not start with vowels. Your result cannot contain duplicates.*/
+
+SELECT 
+  DISTINCT city 
+FROM 
+  station 
+WHERE 
+  Upper (
+    substr(City, 1, 1)
+  ) not in ('a', 'e', 'i', 'o', 'u');
+  
+  /* Task 10. Query the list of CITY names from STATION that do not end with vowels. Your result cannot contain duplicates.*/
+  
+  SELECT 
+  DISTINCT city 
+FROM 
+  station 
+WHERE 
+  lower(
+    substr(
+      City, 
+      Length(City), 
+      1
+    )
+  ) not in ('a', 'e', 'i', 'o', 'u');
+
+/* Task 11. Query the list of CITY names from STATION that either do not start with vowels or do not end with vowels. Your result cannot contain duplicates.*/
+
+SELECT 
+  DISTINCT city 
+FROM 
+  station 
+WHERE 
+  Upper (
+    substr(City, 1, 1)
+  ) not in ('a', 'e', 'i', 'o', 'u') 
+  or lower(
+    substr(
+      City, 
+      Length(City), 
+      1
+    )
+  ) not in ('a', 'e', 'i', 'o', 'u');
+  
+  /* Task 12. Query the list of CITY names from STATION that do not start with vowels and do not end with vowels. Your result cannot contain duplicates./*
+
+SELECT 
+  DISTINCT city 
+FROM 
+  station 
+WHERE 
+  Upper (
+    substr(City, 1, 1)
+  ) not in ('a', 'e', 'i', 'o', 'u') 
+  and lower(
+    substr(
+      City, 
+      Length(City), 
+      1
+    )
+  ) not in ('a', 'e', 'i', 'o', 'u');
+
+
+
