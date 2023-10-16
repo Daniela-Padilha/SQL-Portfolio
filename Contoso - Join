@@ -1,0 +1,389 @@
+/*This is a compilation of exercises done within the IEFP Business Intelligence course.
+These exercises where done using the Contoso database, a fictitious retail demo dataset*/
+
+/*1.Use the INNER JOIN to bring the names of the product subcategories from the DimProductSubcategory table to the DimProduct table.*/
+
+Select
+	ProductSubcategoryName,
+	ProductName,
+	DimProduct.ProductSubcategoryKey
+From
+	DimProductSubcategory
+Inner Join DimProduct
+	ON DimProductSubcategory.ProductSubcategoryKey = DimProduct.ProductSubcategoryKey
+
+/*2.Identify a common column between the DimProductSubcategory and DimProductCategory tables. 
+Use this column to supplement information in the DimProductSubcategory table from the DimProductCategory. Use LEFT JOIN.*/
+
+Select * from DimProductSubcategory
+Select * from DimProductCategory
+
+Select
+	*
+From
+	DimProductSubcategory
+Left Join DimProductCategory
+	ON DimProductSubcategory.ProductCategoryKey = DimProductCategory.ProductCategoryKey
+
+/*3.For each store in the DimStore table, find out which Continent and Country Name are associated with it (according to DimGeography). 
+Your final SELECT should contain only the following columns: StoreKey, StoreName, EmployeeCount, ContinentName, and RegionCountryName. Use LEFT 
+JOIN in this exercise.*/
+
+Select * from DimStore
+Select * from DimGeography
+
+Select
+	Storekey,
+	StoreName,
+	EmployeeCount,
+	ContinentName,
+	RegionCountryName
+From
+	DimStore
+Left Join DimGeography
+	ON DimStore.GeographyKey = DimGeography.GeographyKey
+
+/*4.Supplement the DimProduct table with the ProductCategoryDescription information. 
+Use the LEFT JOIN and return in your SELECT only the 5 columns that you consider most relevant.*/
+
+Select * from DimProduct
+Select * from DimProductSubcategory
+
+Select
+	DimProduct.ProductSubcategoryKey,
+	ProductName,
+	ProductSubcategoryDescription,
+	Manufacturer,
+	BrandName
+from
+	DimProduct
+Left Join DimProductSubcategory
+	On DimProduct.ProductSubcategoryKey= DimProductSubcategory.ProductSubcategoryKey
+
+/*5.The FactStrategyPlan table summarizes the company's strategic planning. Each row represents an amount allocated to a particular AccountKey.
+a) SELECT the first 100 rows of FactStrategyPlan to recognize the table.
+b) Do an INNER JOIN to create a table containing the AccountName for each AccountKey of the FactStrategyPlan table. 
+Your final SELECT should contain the columns:
+• StrategyPlanKey
+• DateKey
+• AccountName
+• Amount*/
+
+Select Top(100) * from FactStrategyPlan
+
+Select
+	StrategyPlanKey,
+	Datekey,
+	AccountName,
+	Amount
+From
+	FactStrategyPlan
+Inner Join DimAccount
+	On FactStrategyPlan.AccountKey = DimAccount.AccountKey
+
+/*6.Let's continue looking at the FactStrategyPlan table. 
+In addition to the AccountKey column that identifies the account type, there is also another column called ScenarioKey. 
+This column has the numbering that identifies the type of scenario: Actual, Budgeted, and Forecast. 
+Do an INNER JOIN to create a table containing the ScenarioName for each ScenarioKey of the FactStrategyPlan table. 
+Your final SELECT should contain the columns:
+• StrategyPlanKey
+• DateKey
+• ScenarioName 
+• Amount*/
+
+Select
+	StrategyPlanKey,
+	Datekey,
+	ScenarioName,
+	Amount
+From
+	FactStrategyPlan
+Inner Join DimScenario
+	On FactStrategyPlan.ScenarioKey = DimScenario.ScenarioKey
+
+/*7.Some subcategories don't have any products at all. Identify what these subcategories are.*/
+
+Select * from DimProductSubcategory
+Select * from DimProduct
+
+Select Distinct
+	Status,
+	ProductSubcategoryName
+from
+	DimProduct
+Inner Join DimProductSubcategory
+	On DimProduct.ProductSubcategoryKey=DimProductSubcategory.ProductSubcategoryKey
+Where Status is Null
+
+/*8.Find out which are the sales channel for the brands Contoso, Fabrikam e Litware.*/
+
+Select * from DimProduct
+Select * from DimChannel
+
+Select
+	distinct BrandName,
+	ChannelName
+from 
+	DimProduct
+Cross join DimChannel
+Where BrandName In ('Contoso', 'Fabrikam', 'Litware')
+
+/*9.In this exercise, you must relate the FactOnlineSales tables to the DimPromotion. 
+Identify the column that the two tables have in common and use it to create that relationship.
+Return a table containing the following columns:
+• OnlineSalesKey
+• DateKey
+• PromotionName
+• SalesAmount
+Your query should only consider sales lines referring to discounted products. 
+In addition, you must sort this table according to the DateKey column, in ascending order.*/
+
+Select Top(100) * from FactOnlineSales
+Select Top(100) * from DimPromotion
+
+Select Top(100)
+	OnlineSalesKey,
+	DateKey,
+	PromotionName,
+	SalesAmount
+From
+	FactOnlineSales
+Inner Join DimPromotion
+	On FactOnlineSales.PromotionKey = DimPromotion.PromotionKey
+Where PromotionName != 'No Discount'
+Order by DateKey Asc
+
+/*10.Join the FactSales table and the tables: DimChannel, DimStore, and DimProduct.
+Sort in ascending order according to SalesAmount*/
+
+Select * from DimChannel
+Select * from DimStore
+Select * from DimProduct
+Select Top(100) * from FactSales
+
+Select Top(100)
+	SalesKey,
+	ChannelName,
+	StoreName,
+	ProductName,
+	SalesAmount
+From
+	FactSales
+Inner join DimProduct
+	On FactSales.ProductKey = DimProduct.ProductKey
+	Inner Join DimStore
+		On FactSales.StoreKey = DimStore.StoreKey
+			Inner Join DimChannel
+				On FactSales.channelKey = DimChannel.ChannelKey
+Order by SalesAmount Desc
+
+/*11.a) Make a summary of the quantity sold (Sales Quantity) according to the name of the sales channel.
+You should sort the final table according to SalesQuantity, in descending order.*/
+
+Select 
+	Sum(SalesQuantity) As 'Quantidade de Vendas',
+	ChannelName
+From
+	FactSales
+Inner Join DimChannel
+	On 
+	FactSales.channelKey = DimChannel.ChannelKey
+Group by ChannelName
+Order by SUM(SalesQuantity) Desc
+
+/*b) Make a grouping showing the total quantity
+Sales Quantity and Total Quantity Returned according to the name of the stores.*/
+
+Select Distinct
+	SUM(SalesQuantity) AS 'Quantidade vendida',
+	SUM(ReturnQuantity) AS 'Quantidade devolvida',
+	StoreName
+From
+	FactSales
+Inner Join DimStore
+	On FactSales.StoreKey = DimStore.StoreKey
+Group by StoreName
+
+/*c) Summarize the total amount sold for each month and year.*/
+
+Select
+	SUM(SalesAmount) AS 'Total vendido',
+	CalendarMonthLabel,
+	CalendarYear
+From
+	FactSales
+Inner join DimDate
+	On FactSales.DateKey = DimDate.Datekey
+Group by CalendarMonthLabel, CalendarYear
+
+/*12. You need to do a sales analysis by products. The ultimate goal is to figure out the total amount sold per product.*/
+
+Select 
+	SUM(SalesAmount) AS 'Valor total vendido',
+	ProductName
+From 
+	FactSales
+Inner Join DimProduct
+	ON FactSales.ProductKey = DimProduct.ProductKey
+Group by ProductName
+
+/*a) Find out which product color sells the most (according to SalesQuantity).*/
+Select 
+	SUM(SalesQuantity) AS 'Quantidade de vendas',
+	ColorName
+From 
+	FactSales
+Inner Join DimProduct
+	ON FactSales.ProductKey = DimProduct.ProductKey
+Group by ColorName
+
+/*b) How many colors had a quantity sold above 3.000.000.*/
+
+Select 
+	SUM(SalesQuantity) AS 'Quantidade de vendas',
+	ColorName
+From 
+	FactSales
+Inner Join DimProduct
+	ON FactSales.ProductKey = DimProduct.ProductKey
+Group by ColorName
+Having SUM(SalesQuantity) > 3000000
+
+/*13. Create a grouping of quantity sold by product category. 
+Note: You will need to do more than 1 INNER JOIN, since the relationship between FactSales and DimProductCategory is not direct.*/
+
+Select Top(10) * from FactSales
+Select * from DimProductCategory
+Select * from DimProduct
+Select * from DimProductSubcategory
+
+Select
+	Sum(SalesQuantity) As 'Qtd. Vendida',
+	ProductCategoryName As ' Categoria'
+From
+	FactSales
+Inner Join DimProduct
+	On FactSales.ProductKey = DimProduct.ProductKey
+		Inner Join DimProductSubcategory
+			On DimProduct.ProductSubcategoryKey = DimProductSubcategory.ProductSubcategoryKey
+				Inner join DimProductCategory
+					On DimProductSubcategory.ProductCategoryKey = DimProductCategory.ProductCategoryKey
+Group by ProductCategoryName
+
+/*14.a) Find out what is the full name of the customer who made the most online purchases.*/
+
+Select top(10)* from FactOnlineSales
+Select top(10)* from DimCustomer
+
+Select Top(1)
+	SUM(SalesQuantity) AS 'Quantidade vendida',
+	FirstName,
+	MiddleName,
+	LastName
+From
+	FactOnlineSales
+	Inner Join DimCustomer
+		On FactOnlineSales.CustomerKey=DimCustomer.CustomerKey
+Where FirstName Is Not null
+Group by FirstName,MiddleName,LastName
+Order by SUM(SalesQuantity) Desc 
+
+/*b) Make a grouping of products and find out which were the top 10 products most purchased by the customer in the previous question, 
+considering the name of the product.*/
+
+Select Top(10)
+	SUM(SalesQuantity) AS 'Quantidade vendida',
+	FirstName,
+	MiddleName,
+	LastName,
+	ProductName
+From
+	FactOnlineSales
+	Inner Join DimCustomer
+		On FactOnlineSales.CustomerKey=DimCustomer.CustomerKey
+			Inner Join DimProduct
+				On FactOnlineSales.ProductKey = DimProduct.ProductKey
+Where FirstName = 'Louis' And LastName = 'Xu'
+Group by FirstName,MiddleName,LastName, ProductName
+Order by SUM(SalesQuantity) Desc 
+
+/*15. Make a summary showing the total products purchased (Sales Quantity) according to the gender of the customers.*/
+
+Select
+	SUM(SalesQuantity) As 'Total de produtos',
+	Gender
+From
+	FactOnlineSales
+	Inner Join DimCustomer
+		On FactOnlineSales.CustomerKey = DimCustomer.CustomerKey
+Where Gender is not null
+Group by Gender
+
+/*16. Make a summary table showing the average exchange rate according to each CurrencyDescription. 
+The final table should only contain rates between 10 and 100.*/
+
+Select top(10) * from FactExchangeRate
+
+Select
+	AVG(AverageRate) As 'Taxa de câmbio média',
+	CurrencyDescription
+From
+	FactExchangeRate
+		Inner Join DimCurrency
+			On FactExchangeRate.CurrencyKey = DimCurrency.CurrencyKey
+Group by CurrencyDescription
+Having AVG(AverageRate) Between 10 and 100
+
+/*17. Calculate the TOTAL SUM of AMOUNT for the FactStrategyPlan table for the scenarios: Current and Budget.*/
+
+Select top(10) * from FactStrategyPlan
+
+Select
+	SUM(Amount) As 'Soma Total',
+	ScenarioName
+From FactStrategyPlan
+	Inner join DimScenario
+		On FactStrategyPlan.ScenarioKey = DimScenario.ScenarioKey
+Where ScenarioName In ('Actual', 'Budget')
+Group By ScenarioName 
+
+/*18. Make a summary table showing the result of strategic planning by year.*/
+
+Select * from DimDate
+
+Select
+	SUM(Amount) As 'Soma Total',
+	CalendarYear
+From FactStrategyPlan
+	Inner join DimDate
+		On FactStrategyPlan.Datekey = DimDate.Datekey
+Group by CalendarYear
+
+/*19. Group product quantity by ProductSubcategoryName. 
+Take into account in your analysis only the Contoso brand and the Silver color.*/
+
+Select
+	Count(*) As ' Qtde. de Produtos',
+	ProductSubcategoryName,
+	BrandName,
+	ColorName
+From	
+	DimProduct
+		Inner Join DimProductSubcategory
+			ON DimProduct.ProductSubcategoryKey=DimProductSubcategory.ProductSubcategoryKey
+Where BrandName = 'Contoso' and ColorName = 'Silver'
+Group by BrandName, ColorName, ProductSubcategoryName
+
+/*20. Double-group product quantity by BrandName and ProductSubcategoryName. 
+The final table should be sorted according to the BrandName column*/
+
+Select
+	Count(*) As 'Qtde de Produtos',
+	BrandName As 'Marcas',
+	ProductSubcategoryName As 'Qtde de subcategorias'
+From
+	DimProduct
+	Inner join DimProductSubcategory
+		On DimProduct.ProductSubcategoryKey = DimProductSubcategory.ProductSubcategoryKey
+Group by BrandName, ProductSubcategoryName
+Order by BrandName
