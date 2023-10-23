@@ -1,0 +1,88 @@
+/*1. The texts of the product names in the DimProduct table are quite large, they probably won't fit in a graphic and the visualization will look bad.
+a) List all the products so that a graphic can be created to be presented at the daily team meeting. Query the DimProduct table that returns the name of the product and the number of characters each product has, and sort that product table with the largest number of characters to the smallest.*/
+
+Select
+	ProductName,
+	LEN(ProductName) as 'character count'
+from
+	DimProduct
+Order by LEN(productname) Desc
+
+/*b) What is the average character count of product names?*/
+
+Select
+	AVG(LEN(ProductName)) as 'average character count'
+from
+	DimProduct
+
+/*c) Analyze the structure of the product names and see if it would be possible to reduce the size of the product name.*/
+
+Select 
+	REPLACE(productname, SUBSTRING(productname, Charindex(ColorName,productname),30),ColorID)
+From
+	DimProduct
+
+/*d) What is the average number of characters in this new scenario?*/
+
+Select
+	AVG(LEN(ProductName)) as 'average number of characters'
+from
+	DimProduct
+
+/*2. The StyleName column of the DimProduct table has some codes identified by distinct numbers, ranging from 0 to 9.
+However, the control sector decided to change the identification of the StyleName, and instead of using numbers, the idea is now to start using letters to replace the numbers, as shown in the example below: 0->A, 1->B, 2->C, 3->D, 4->E, 5->F, 6->G, 7->H, 8->I, 9->J
+It is your responsibility to change the numbers by letters in the StyleName column of the DimProduct table.*/
+
+Select
+	Translate(StyleName, '0123456789','ABCDEFGHIJ') 
+from
+	DimProduct
+
+/*3. IT is creating a system for individual tracking of each employee in the Contoso company. Each employee will be assigned a login and password. Each employee's login will be the email ID. The password will be the FirtName + the day of the year the employee was born, in UPPERCASE. For example, an employee with E-mail: mark0@contoso.com and date of birth 15/01/1990 must have the following login: Login: mark0 Password: MARK15
+The IT manager asked for your help to return a table containing the following columns from the DimEmployee table: Full Name (FirstName + LastName), Email, Email ID, and Password.
+
+Select
+	Concat (FirstName, ' ',LastName) as 'Full Name',
+	EmailAddress as 'E-mail',
+	Lower(Substring(EmailAddress,1,Charindex('@', EmailAddress)-1)) as 'E-mail ID',
+	Upper(FirstName) + Cast(datepart(day,BirthDate) as varchar(10)) as 'Password'
+From
+	DimEmployee
+
+/*4. The DimCustomer table has the first sales record in the year 2001. 
+As a way to recognize the customers who made purchases in that year, the Marketing department asked you to return a table with all the customers who made their first purchase that year so that a package with a gift can be sent to each one.
+You should return the FirstName, EmailAddress, AddressLine1, and DateFirstPurchase columns, considering only customers who made their first purchase in the year 2001.*/
+
+Select
+	FirstName,
+	EmailAddress,
+	AddressLine1,
+	DateFirstPurchase
+from
+	DimCustomer
+Where DateFirstPurchase like '2001%'
+
+/*5. The DimEmployee table has a hire date information. The HR area, however, needs the information of these dates separately in day, month and year, as an automation will be made to create an HR report, and it would be much easier if this information were separated in a table.
+You should return a table containing the following information: FirstName, EmailAddress, HireDate, as well as the Day, Month, and Year columns of hiring. 
+Note: The Month column must contain the name of the month, not the number of the month.*/
+
+Select
+	FirstName,
+	EmailAddress,
+	HireDate,
+	DATENAME(day,HireDate) as 'Day',
+	DATENAME(month,HireDate) as 'Month',
+	DATENAME(year,HireDate) as 'Year'
+from
+	DimEmployee
+
+/*6. Find out which store has the highest uptime (in days).*/
+
+Select Top(1)
+	StoreName,
+	Datediff(day,OpenDate,getdate()) as 'Days open'
+from
+	DimStore
+Order by Datediff(day,OpenDate,getdate()) Desc
+
+
