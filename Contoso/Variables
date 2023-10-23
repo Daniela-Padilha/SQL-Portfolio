@@ -1,1 +1,44 @@
+/* 1.You have to perform quality control over the company's stores. 
+The first piece of information that is passed on to you is that the year 2008 was very complicated for the company, as it was when two of the main stores closed. 
+Your first challenge is to find out the name of those stores that closed in 2008, so you can understand why and map out action plans to prevent other important stores from taking the same path. Your result should be structured in a sentence, with the following structure:
+'The stores closed in the year 2008 were: ' + store_name */
 
+Select
+	StoreName,
+	CloseReason,
+	CloseDate
+from
+	DimStore
+Where CloseDate like '%2008%'
+
+Declare
+	@store_name varchar(30)
+Set
+	@store_name = (Select
+	StoreName from DimStore Where CloseDate like '%2008%')
+Print 'The stores closed in the year 2008 were: ' + @store_name
+
+/*2.You need to create a query to show the list of products in the table
+DimProduct for a specific subcategory: 'Lamps'*/
+
+Select
+	*
+from
+	DimProduct
+Select 
+	*
+from
+	DimProductSubcategory
+Where ProductSubcategoryName = 'Lamps'
+
+Declare
+	@productsubcategorykey Int
+Set
+	@productsubcategorykey = (Select 
+	ProductSubcategoryKey from DimProductSubcategory Where ProductSubcategoryName = 'Lamps')
+Print @productsubcategorykey
+Select
+	*
+From
+	DimProduct
+Where ProductSubcategoryKey=@productsubcategorykey
